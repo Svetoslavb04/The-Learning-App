@@ -31,7 +31,7 @@ router.post('/courses', async (req, res) => {
 
     } catch (error) {
 
-        res.json({ error: 'Failed to add course' });
+        res.status(400).json({ error: 'Failed to add course' });
 
     }
 
@@ -49,7 +49,7 @@ router.put('/courses/:_id', async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.json({ error: 'Failed to update course' });
+        res.status(400).json({ error: 'Failed to update course' });
 
     }
 
@@ -65,7 +65,7 @@ router.delete('/courses/:_id', async (req, res) => {
 
     } catch (error) {
 
-        res.json({ error: 'Failed to remove course' });
+        res.status(400).json({ error: 'Failed to remove course' });
 
     }
 
@@ -86,7 +86,7 @@ router.post('/image/:_courseId', upload.single('image'), async (req, res) => {
 
     } catch (error) {
 
-        res.json({ error: 'Failed to upload image' })
+        res.status(400).json({ error: 'Failed to upload image' })
     }
 
 });
@@ -101,7 +101,7 @@ router.get('/image/:_id', async (req, res) => {
 
     } catch (error) {
 
-        res.json({ error: 'Failed to retrieve course' });
+        res.status(400).json({ error: 'Failed to retrieve course' });
 
     }
 
@@ -109,7 +109,7 @@ router.get('/image/:_id', async (req, res) => {
 
 router.all('*', (req, res) => {
 
-    res.json('Invalid endpoint!');
+    res.status(400).json('Invalid endpoint!');
 
 });
 
