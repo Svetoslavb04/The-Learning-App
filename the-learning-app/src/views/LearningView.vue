@@ -1,5 +1,13 @@
+<script setup>
+
+import Header from "../components/Header.vue";
+
+</script>
+
 <template>
-  <div class="learning">
+  <Header />
+  <div class="learning-content">
+    
   </div>
 </template>
 
