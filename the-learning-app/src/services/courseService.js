@@ -25,3 +25,20 @@ export const changeCourseState = (state, course_id) => fetch(`${apiData.url}/cou
     .catch(err => {
         throw err;
     })
+
+export const removeCourse = (course_id) => fetch(`${apiData.url}/courses/${course_id}`, {
+    method: 'DELETE'
+})
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.error) {
+            throw Error(data.error);
+        }
+
+        return data.course;
+
+    })
+    .catch(err => {
+        throw err;
+    })
