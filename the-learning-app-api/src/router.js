@@ -39,9 +39,8 @@ router.post('/courses', async (req, res) => {
 });
 
 router.put('/courses/:_id', async (req, res) => {
-
+    
     try {
-
         const updatedCourse = await updateCourse({ _id: req.params._id, ...req.body });
 
         res.json({ course: updatedCourse });
