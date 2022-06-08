@@ -1,5 +1,10 @@
 const router = require('express').Router();
 
+const multer = require('multer');
+
+const multerStorage = multer.memoryStorage();
+const upload = multer({ storage: multerStorage });
+
 const { uploadImage, getImage, setImageIdForCourse, getAllCourses, addCourse, deleteCourse, updateCourse } = require('./services/courseService');
 
 router.get('/courses', async (req, res) => {
@@ -66,3 +71,46 @@ router.delete('/courses/:_id', async (req, res) => {
 
 
 });
+
+router.post('/image/:_courseId', upload.single('image'), async (req, res) => {
+
+    try {
+
+        const image = { data: new Buffer.from(req.file.buffer, 'base64'), contentType: req.file.mimetype }
+
+        const savedImage = await uploadImage(image, req.params.course_id);
+
+        setImageIdForCourse(req.params._id, savedImage._id);
+
+        res.send(savedImage);
+
+    } catch (error) {
+
+        res.json({ error: 'Failed to upload image' })
+    }
+
+});
+
+router.get('/image/:_id', async (req, res) => {
+
+    try {
+
+        const image = await getImage(req.params._id);
+
+        res.send(image);
+
+    } catch (error) {
+
+        res.json({ error: 'Failed to retrieve course' });
+
+    }
+
+});
+
+router.all('*', (req, res) => {
+
+    res.json('Invalid endpoint!');
+
+});
+
+module.exports = router;
