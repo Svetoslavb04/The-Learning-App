@@ -17,7 +17,7 @@ const courseSchema = new mongoose.Schema({
         enum: ['Active', 'Archived'],
         default: 'Active'
     },
-    dataAdded: {
+    dateAdded: {
         type: Number
     },
     imageId: {
@@ -29,7 +29,7 @@ const courseSchema = new mongoose.Schema({
 courseSchema
     .pre('save', async function (next) {
 
-        this.dataAdded = Number(new Date().getTime());
+        this.dateAdded = Number(new Date().getTime());
 
         next();
     });
