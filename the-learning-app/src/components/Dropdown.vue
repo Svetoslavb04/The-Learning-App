@@ -62,8 +62,7 @@ export default {
 }
 
 .dropdown-list {
-  width: 100%;
-  position: absolute;
+  position: fixed;
   background-color: #1b262c;
   color: #bbe1fa;
   z-index: 1;

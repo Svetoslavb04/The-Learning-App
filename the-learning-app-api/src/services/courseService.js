@@ -1,4 +1,5 @@
 const Course = require('../models/Course');
+const Image = require('../models/Image');
 
 exports.getAllCourses = () =>
     Course.find().lean();
@@ -20,3 +21,9 @@ exports.setImageIdForCourse = (course_id, image_id) =>
 
 exports.deleteCourse = (_id) =>
     Course.findOneAndDelete({ _id });
+
+exports.uploadImage = (image, course_id) =>
+    Image.create({ image, course_id });
+
+exports.getImage = (_id) =>
+    Image.findOne({ _id }).lean();

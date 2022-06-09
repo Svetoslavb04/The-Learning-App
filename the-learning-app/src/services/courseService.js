@@ -24,14 +24,14 @@ export const changeCourseState = (state, course_id) => fetch(`${apiData.url}/cou
     })
     .catch(err => {
         throw err;
-    })
+    });
 
 export const deleteCourse = (course_id) => fetch(`${apiData.url}/courses/${course_id}`, {
     method: 'DELETE'
 })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
+        
         if (data.error) {
             throw Error(data.error);
         }
@@ -40,6 +40,27 @@ export const deleteCourse = (course_id) => fetch(`${apiData.url}/courses/${cours
 
     })
     .catch(err => {
-        console.log(err);
+        
         throw err;
+    });
+
+export const addCourse = (course) => fetch(`${apiData.url}/courses`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(course)
+})
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.error) {
+            throw Error(data.error);
+        }
+
+        return data.course;
+
     })
+    .catch(err => {
+        throw err;
+    });

@@ -1,68 +1,38 @@
 <script>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import apiData from "../config/api.js";
-import {
-  getAllCourses,
-  changeCourseState,
-  deleteCourse,
-} from "../services/courseService.js";
+import { changeCourseState } from "../services/courseService.js";
 import Dropdown from "./Dropdown.vue";
 import Remove from "./icons/Remove.vue";
+import Edit from "./icons/Edit.vue";
 
 export default {
   components: {
     Dropdown,
     Remove,
+    Edit,
   },
-  async setup() {
-    const courses = ref([]);
-
-    try {
-      let rawCourses = await getAllCourses();
-
-      rawCourses = rawCourses.map((c) => {
-        const dateAdded = new Date(c.dateAdded);
-
-        const monthNameLong = dateAdded.toLocaleString("en-US", { month: "long" });
-
-        const dateAddedString = `${dateAdded.getDate()} ${monthNameLong}, ${dateAdded.getFullYear()}`;
-
-        return { ...c, dateAdded: dateAddedString };
-      });
-
-      courses.value = rawCourses;
-    } catch (error) {}
-
+  props: {
+    courses: Array,
+    removeCourse: Function,
+  },
+  async setup(props) {
     const changeState = async (course_id, newState) => {
       try {
         await changeCourseState(newState, course_id);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     const replaceImage = (e) => {
       e.currentTarget.outerHTML = "Error";
     };
 
-    const removeCourse = async (_id) => {
-
-      try {
-        const course = await deleteCourse(_id);
-        console.log(course);
-        courses.value = courses.value.filter((c) => c._id != _id);
-        console.log('s');
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     return {
-      courses,
+      courses: props.courses.value,
       changeState,
       url: `${apiData.url}/courses`,
       replaceImage,
-      removeCourse,
+      removeCourse: props.removeCourse,
     };
   },
 };
@@ -80,7 +50,8 @@ export default {
           <th class="state-cell">State</th>
           <th>Date added</th>
           <th>Image</th>
-          <th></th>
+          <th class="empty-header-cell"></th>
+          <th class="empty-header-cell"></th>
         </tr>
       </thead>
       <tbody>
@@ -104,8 +75,13 @@ export default {
               @error="replaceImage"
             />
           </th>
-          <th class="course-delete-cell">
-            <div class="remove-wrapper" @click="removeCourse.call(null, course._id)">
+          <th class="course-icon-cell">
+            <div class="icon-wrapper">
+              <Edit />
+            </div>
+          </th>
+          <th class="course-icon-cell">
+            <div class="icon-wrapper" @click="removeCourse.call(null, course._id)">
               <Remove />
             </div>
           </th>
@@ -116,10 +92,9 @@ export default {
 </template>
 
 <style>
-
 .learning-table-wrapper {
-  margin: 40px 0;
-  height: 500px;
+  margin: 30px 0;
+  max-height: 400px;
   overflow: auto;
 }
 
@@ -129,13 +104,13 @@ table {
   border-spacing: 0;
 }
 
-th {
-  padding: 10px;
-  border-top: 1px solid #1b262c;
+th:first-child {
   border-left: 1px solid #1b262c;
 }
 
-th:last-child {
+th {
+  padding: 10px;
+  border-top: 1px solid #1b262c;
   border-right: 1px solid #1b262c;
 }
 
@@ -143,11 +118,8 @@ thead th {
   border-bottom: 1px solid #1b262c;
 }
 
-thead th:last-child {
-  border-left: 1px solid #1b262c;
-  border-top: 0;
-  border-right: 0;
-  border-bottom: 0;
+.empty-header-cell {
+  border: 0;
 }
 
 tbody tr:first-child th {
@@ -159,14 +131,14 @@ tbody tr:last-child th {
 }
 
 .state-cell {
-    min-width: 120px;
-} 
-
-.course-delete-cell {
-  padding: 0;
+  min-width: 120px;
 }
 
-.remove-wrapper {
+.course-icon-cell {
+  padding: 5px;
+}
+
+.icon-wrapper {
   margin: 0 auto;
   width: 35px;
   cursor: pointer;
@@ -174,7 +146,7 @@ tbody tr:last-child th {
 
 @media (max-height: 600px) {
   .learning-table-wrapper {
-    height: 300px;
+    max-height: 300px;
   }
 }
 </style>
