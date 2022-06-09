@@ -77,7 +77,7 @@ export default {
           <th>Course name</th>
           <th>Description</th>
           <th>Lessons(count)</th>
-          <th>State</th>
+          <th class="state-cell">State</th>
           <th>Date added</th>
           <th>Image</th>
           <th></th>
@@ -89,7 +89,7 @@ export default {
           <th>{{ course.name }}</th>
           <th>{{ course.description || "-" }}</th>
           <th>{{ course.lessons }}</th>
-          <th>
+          <th class="state-cell">
             <Dropdown
               :items="['Active', 'Archived']"
               :selected="course.state"
@@ -116,6 +116,13 @@ export default {
 </template>
 
 <style>
+
+.learning-table-wrapper {
+  margin: 40px 0;
+  height: 500px;
+  overflow: auto;
+}
+
 table {
   width: 80%;
   margin: 0 auto;
@@ -123,7 +130,7 @@ table {
 }
 
 th {
-  padding: 20px 10px;
+  padding: 10px;
   border-top: 1px solid #1b262c;
   border-left: 1px solid #1b262c;
 }
@@ -151,6 +158,10 @@ tbody tr:last-child th {
   border-bottom: 1px solid #1b262c;
 }
 
+.state-cell {
+    min-width: 120px;
+} 
+
 .course-delete-cell {
   padding: 0;
 }
@@ -159,5 +170,11 @@ tbody tr:last-child th {
   margin: 0 auto;
   width: 35px;
   cursor: pointer;
+}
+
+@media (max-height: 600px) {
+  .learning-table-wrapper {
+    height: 300px;
+  }
 }
 </style>

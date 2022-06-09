@@ -59,11 +59,10 @@ router.delete('/courses/:_id', async (req, res) => {
     try {
 
         const removedCourse = await deleteCourse(req.params._id);
-
+        
         res.json({ course: removedCourse });
 
     } catch (error) {
-
         res.status(400).json({ error: 'Failed to remove course' });
 
     }
